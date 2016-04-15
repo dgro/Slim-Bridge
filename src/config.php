@@ -7,6 +7,7 @@ use Interop\Container\ContainerInterface;
 use Invoker\Invoker;
 use Invoker\ParameterResolver\AssociativeArrayResolver;
 use Invoker\ParameterResolver\Container\TypeHintContainerResolver;
+use Invoker\ParameterResolver\DefaultValueResolver;
 use Invoker\ParameterResolver\ResolverChain;
 use Slim\Http\Headers;
 use Slim\Http\Request;
@@ -58,6 +59,8 @@ return [
             new AssociativeArrayResolver,
             // Then inject services by type-hints for those that weren't resolved
             new TypeHintContainerResolver($c),
+            // If a parameter is not resolved by now, use it's default value if available
+            new DefaultValueResolver(),
         ];
         return new Invoker(new ResolverChain($resolvers), $c);
     },
